@@ -12,7 +12,7 @@ import org.xutils.view.annotation.ContentView;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.fragment_home)
-public class HomeFragment extends xUtilsFragment {
+public class ProductsFragment extends xUtilsFragment {
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {

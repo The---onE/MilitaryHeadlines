@@ -19,13 +19,18 @@ import android.view.MenuItem;
 import com.avos.avoscloud.AVException;
 import com.xmx.mh.base.activity.BaseActivity;
 import com.xmx.mh.common.user.IUserManager;
+import com.xmx.mh.core.fragments.HistoryFragment;
+import com.xmx.mh.core.fragments.HotFragment;
+import com.xmx.mh.core.fragments.InternationalFragment;
+import com.xmx.mh.core.fragments.MilitaryFragment;
+import com.xmx.mh.core.fragments.ProductsFragment;
 import com.xmx.mh.module.user.LoginActivity;
 import com.xmx.mh.common.user.LoginEvent;
 import com.xmx.mh.common.user.UserData;
 import com.xmx.mh.common.user.callback.LogoutCallback;
 import com.xmx.mh.core.Constants;
 import com.xmx.mh.R;
-import com.xmx.mh.core.fragments.HomeFragment;
+import com.xmx.mh.core.fragments.RecommendFragment;
 import com.xmx.mh.core.PagerAdapter;
 import com.xmx.mh.common.user.callback.AutoLoginCallback;
 import com.xmx.mh.common.user.UserConstants;
@@ -57,12 +62,12 @@ public class MainActivity extends BaseActivity
 
         // Fragment列表
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new HomeFragment());
-        fragments.add(new HomeFragment());
-        fragments.add(new HomeFragment());
-        fragments.add(new HomeFragment());
-        fragments.add(new HomeFragment());
+        fragments.add(new RecommendFragment());
+        fragments.add(new HotFragment());
+        fragments.add(new MilitaryFragment());
+        fragments.add(new InternationalFragment());
+        fragments.add(new HistoryFragment());
+        fragments.add(new ProductsFragment());
 
         // Fragment对应的标题
         List<String> titles = new ArrayList<>();
