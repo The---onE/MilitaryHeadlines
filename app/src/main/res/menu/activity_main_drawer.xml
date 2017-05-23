@@ -3,23 +3,23 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:title="首页" />
+            android:id="@+id/nav_recommend"
+            android:title="推荐" />
         <item
-            android:id="@+id/nav_cart"
-            android:title="购物车" />
+            android:id="@+id/nav_hot"
+            android:title="热点" />
         <item
-            android:id="@+id/nav_notification"
-            android:title="通知" />
+            android:id="@+id/nav_military"
+            android:title="军事" />
         <item
-            android:id="@+id/nav_im"
-            android:title="IM" />
+            android:id="@+id/nav_international"
+            android:title="国际" />
         <item
-            android:id="@+id/nav_push"
-            android:title="推送" />
+            android:id="@+id/nav_history"
+            android:title="历史" />
         <item
-            android:id="@+id/nav_data"
-            android:title="数据" />
+            android:id="@+id/nav_products"
+            android:title="军品" />
     </group>
 
     <group android:checkableBehavior="single">

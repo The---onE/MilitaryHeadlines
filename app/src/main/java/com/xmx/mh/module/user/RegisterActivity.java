@@ -90,12 +90,12 @@ public class RegisterActivity extends BaseTempActivity {
             }
         });
 
-        getViewById(R.id.register_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        getViewById(R.id.register_cancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
     }
 
     @Override

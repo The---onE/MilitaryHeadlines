@@ -192,22 +192,22 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.nav_home: // 首页
+            case R.id.nav_recommend: // 推荐
                 vp.setCurrentItem(0);
                 break;
-            case R.id.nav_cart: // 购物车
+            case R.id.nav_hot: // 热点
                 vp.setCurrentItem(1);
                 break;
-            case R.id.nav_notification: // 通知
+            case R.id.nav_military: // 军事
                 vp.setCurrentItem(2);
                 break;
-            case R.id.nav_im: // IM
+            case R.id.nav_international: // 国际
                 vp.setCurrentItem(3);
                 break;
-            case R.id.nav_push: // 推送
+            case R.id.nav_history: // 历史
                 vp.setCurrentItem(4);
                 break;
-            case R.id.nav_data: // 数据
+            case R.id.nav_products: // 军品
                 vp.setCurrentItem(5);
                 break;
             case R.id.nav_setting: // 设置

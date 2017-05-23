@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
+import com.xmx.mh.base.activity.BaseTempActivity;
 import com.xmx.mh.common.user.IUserManager;
 import com.xmx.mh.common.user.UserConstants;
 import com.xmx.mh.common.user.UserData;
@@ -16,11 +17,10 @@ import com.xmx.mh.common.user.UserManager;
 import com.xmx.mh.core.Constants;
 import com.xmx.mh.core.activity.MainActivity;
 import com.xmx.mh.R;
-import com.xmx.mh.base.activity.BaseActivity;
 import com.xmx.mh.common.user.callback.LoginCallback;
 import com.xmx.mh.utils.ExceptionUtil;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseTempActivity {
     private long mExitTime = 0;
     public boolean mustFlag = false;
 
