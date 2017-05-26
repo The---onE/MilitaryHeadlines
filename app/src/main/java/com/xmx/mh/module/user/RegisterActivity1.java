@@ -9,20 +9,14 @@ import android.widget.EditText;
 import com.avos.avoscloud.AVException;
 import com.xmx.mh.R;
 import com.xmx.mh.base.activity.BaseTempActivity;
-import com.xmx.mh.common.net.HttpGetCallback;
-import com.xmx.mh.common.net.HttpManager;
 import com.xmx.mh.common.user.IUserManager;
 import com.xmx.mh.common.user.UserConstants;
 import com.xmx.mh.common.user.UserData;
 import com.xmx.mh.common.user.UserManager;
 import com.xmx.mh.common.user.callback.RegisterCallback;
-import com.xmx.mh.module.net.NetConstants;
 import com.xmx.mh.utils.ExceptionUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class RegisterActivity extends BaseTempActivity {
+public class RegisterActivity1 extends BaseTempActivity {
 
     private IUserManager userManager = UserManager.getInstance();
 
@@ -64,25 +58,35 @@ public class RegisterActivity extends BaseTempActivity {
                 }
 
                 register.setEnabled(false);
+                userManager.register(username, password, nickname, new RegisterCallback() {
+                    @Override
+                    public void success(UserData user) {
+                        showToast(R.string.register_success);
+                        setResult(RESULT_OK, new Intent());
+                        finish();
+                    }
 
-                Map<String, String> params = new HashMap<>();
-                params.put("user", username);
-                params.put("pwd", password);
+                    @Override
+                    public void error(AVException e) {
+                        showToast(R.string.network_error);
+                        ExceptionUtil.normalException(e, getBaseContext());
+                        register.setEnabled(true);
+                    }
 
-                HttpManager.getInstance().get(NetConstants.REGISTER_URL, params,
-                        new HttpGetCallback() {
-                            @Override
-                            public void success(String result) {
-                                showToast(result);
+                    @Override
+                    public void error(int error) {
+                        switch (error) {
+                            case UserConstants.USERNAME_EXIST:
+                                showToast(R.string.username_exist);
                                 register.setEnabled(true);
-                            }
-
-                            @Override
-                            public void fail(Exception e) {
-                                ExceptionUtil.normalException(e, RegisterActivity.this);
+                                break;
+                            case UserConstants.NICKNAME_EXIST:
+                                showToast(R.string.nickname_exist);
                                 register.setEnabled(true);
-                            }
-                        });
+                                break;
+                        }
+                    }
+                });
             }
         });
 

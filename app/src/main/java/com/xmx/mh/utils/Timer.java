@@ -6,11 +6,11 @@ import android.os.Handler;
  * Created by The_onE on 2016/3/23.
  */
 public abstract class Timer {
-    long delay = 1000;
-    boolean onceFlag = false;
+    private long delay = 1000;
+    private boolean onceFlag = false;
 
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             timer();

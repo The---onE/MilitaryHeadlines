@@ -2,6 +2,7 @@ package com.xmx.mh.core;
 
 import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.xmx.mh.common.log.OperationLogEntityManager;
@@ -105,7 +106,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         if (Constants.EXCEPTION_DEBUG) {
             // 打印异常堆栈跟踪
-            ex.printStackTrace();
+            Log.e("Error:", Log.getStackTraceString(ex));
         }
         // 记录错误日志
         OperationLogEntityManager.getInstance().addLog(ex.toString());
