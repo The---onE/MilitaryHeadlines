@@ -36,34 +36,10 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  */
-@ContentView(R.layout.fragment_home)
-public class RecommendFragment extends xUtilsFragment {
-
-    @ViewInject(R.id.listTitle)
-    private ListView listTitle;
-    private ArticleListAdapter listAdapter;
-    private List<ArticleTitle> list;
-
-    @ViewInject(R.id.layout_loading)
-    private RelativeLayout loadingLayout;
+public class RecommendFragment extends BaseTitleFragment {
 
     @Override
-    protected void processLogic(Bundle savedInstanceState) {
-        listAdapter = new ArticleListAdapter(getContext(), new ArrayList<ArticleTitle>());
-        listTitle.setAdapter(listAdapter);
-        listTitle.addFooterView(((LayoutInflater) getActivity().
-                getSystemService(LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.footer_article_title, null, false));
-        listTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                ArticleTitle articleTitle = list.get(i);
-                intent.putExtra("id", articleTitle.id);
-                startActivity(intent);
-            }
-        });
-
+    public void loadData() {
         Map<String, String> condition = new HashMap<>();
         condition.put("type", "1");
         HttpManager.getInstance().get(NetConstants.TITLE_LIST_URL, condition, new HttpGetCallback() {
@@ -107,7 +83,5 @@ public class RecommendFragment extends xUtilsFragment {
                 showToast("服务器连接失败");
             }
         });
-
     }
-
 }

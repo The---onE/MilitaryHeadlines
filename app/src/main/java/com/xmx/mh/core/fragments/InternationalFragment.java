@@ -11,12 +11,10 @@ import org.xutils.view.annotation.ContentView;
 /**
  * A simple {@link Fragment} subclass.
  */
-@ContentView(R.layout.fragment_home)
-public class InternationalFragment extends xUtilsFragment {
+public class InternationalFragment extends BaseTitleFragment {
 
     @Override
-    protected void processLogic(Bundle savedInstanceState) {
+    public void loadData() {
 
     }
-
 }

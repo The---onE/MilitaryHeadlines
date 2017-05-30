@@ -24,19 +24,10 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-@ContentView(R.layout.fragment_home)
-public class HotFragment extends xUtilsFragment {
-
-    @ViewInject(R.id.listTitle)
-    private ListView listTitle;
-    private ArticleListAdapter listAdapter;
-    private List<ArticleTitle> list;
-
-    @ViewInject(R.id.layout_loading)
-    private RelativeLayout loadingLayout;
+public class HotFragment extends BaseTitleFragment {
 
     @Override
-    protected void processLogic(Bundle savedInstanceState) {
+    public void loadData() {
         loadingLayout.setVisibility(View.GONE);
         listTitle.setVisibility(View.VISIBLE);
 
@@ -64,5 +55,4 @@ public class HotFragment extends xUtilsFragment {
             }
         });
     }
-
 }

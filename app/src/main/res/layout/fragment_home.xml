@@ -31,19 +31,12 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_data"
+    <ListView
+        android:id="@+id/listTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
-        <ListView
-            android:id="@+id/listTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-        </ListView>
-    </RelativeLayout>
+    </ListView>
 
 </LinearLayout>
