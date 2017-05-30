@@ -24,6 +24,7 @@ import com.xmx.mh.core.fragments.HotFragment;
 import com.xmx.mh.core.fragments.InternationalFragment;
 import com.xmx.mh.core.fragments.MilitaryFragment;
 import com.xmx.mh.core.fragments.ProductsFragment;
+import com.xmx.mh.module.log.OperationLogActivity;
 import com.xmx.mh.module.user.LoginActivity;
 import com.xmx.mh.common.user.LoginEvent;
 import com.xmx.mh.common.user.UserData;
@@ -211,6 +212,9 @@ public class MainActivity extends BaseActivity
                 vp.setCurrentItem(5);
                 break;
             case R.id.nav_setting: // 设置
+                break;
+            case R.id.nav_log: // 设置
+                startActivity(OperationLogActivity.class);
                 break;
             case R.id.nav_logout: // 登录/注销
                 final Intent intent = new Intent(this, LoginActivity.class);

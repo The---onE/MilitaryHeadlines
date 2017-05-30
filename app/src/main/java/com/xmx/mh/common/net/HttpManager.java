@@ -2,7 +2,6 @@ package com.xmx.mh.common.net;
 
 import android.os.AsyncTask;
 
-import com.xmx.mh.utils.CollectionUtil;
 import com.xmx.mh.utils.StrUtil;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class HttpManager {
 
     private OkHttpClient client = new OkHttpClient();
 
-    public String makeGetRequest(String url, Map<String, String> params) {
+    private String makeGetRequest(String url, Map<String, String> params) {
         List<String> list = new ArrayList<>();
         for (Map.Entry<String, String> entry : params.entrySet()){
             String key = entry.getKey();

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.xmx.mh.R;
 import com.xmx.mh.base.fragment.xUtilsFragment;
@@ -31,8 +32,14 @@ public class HotFragment extends xUtilsFragment {
     private ArticleListAdapter listAdapter;
     private List<ArticleTitle> list;
 
+    @ViewInject(R.id.layout_loading)
+    private RelativeLayout loadingLayout;
+
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        loadingLayout.setVisibility(View.GONE);
+        listTitle.setVisibility(View.VISIBLE);
+
         list = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
             ArticleTitle articleTitle = new ArticleTitle();

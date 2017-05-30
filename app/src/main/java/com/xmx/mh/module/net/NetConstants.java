@@ -10,4 +10,6 @@ public class NetConstants {
     public static final String REGISTER_URL = SERVER_URL + "/Register";
     public static final String LOGIN_URL = SERVER_URL + "/Login";
 
+    public static final String TITLE_LIST_URL = SERVER_URL + "/GetTitleList";
+
 }
