@@ -10,25 +10,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.andview.refreshview.XRefreshView;
 import com.xmx.mh.R;
 import com.xmx.mh.base.fragment.BaseFragment;
-import com.xmx.mh.base.fragment.xUtilsFragment;
-import com.xmx.mh.common.net.HttpGetCallback;
-import com.xmx.mh.common.net.HttpManager;
 import com.xmx.mh.module.article.ArticleActivity;
 import com.xmx.mh.module.article.ArticleListAdapter;
 import com.xmx.mh.module.article.ArticleTitle;
-import com.xmx.mh.module.net.NetConstants;
-import com.xmx.mh.utils.ExceptionUtil;
-import com.xmx.mh.utils.JSONUtil;
-
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -42,6 +32,9 @@ public abstract class BaseTitleFragment extends BaseFragment {
     protected List<ArticleTitle> list;
 
     protected RelativeLayout loadingLayout;
+    protected XRefreshView dataLayout;
+
+    protected boolean loadingFlag = false;
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container) {
@@ -51,9 +44,19 @@ public abstract class BaseTitleFragment extends BaseFragment {
     protected void initView(View view, Bundle savedInstanceState) {
         listTitle = (ListView) view.findViewById(R.id.listTitle);
         loadingLayout = (RelativeLayout) view.findViewById(R.id.layout_loading);
+        dataLayout = (XRefreshView) view.findViewById(R.id.layout_data);
     }
 
     protected void setListener(View view) {
+        loadingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!loadingFlag) {
+                    loadData();
+                }
+            }
+        });
+
         listTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -61,6 +64,32 @@ public abstract class BaseTitleFragment extends BaseFragment {
                 ArticleTitle articleTitle = list.get(i);
                 intent.putExtra("id", articleTitle.id);
                 startActivity(intent);
+            }
+        });
+
+        dataLayout.setXRefreshViewListener(new XRefreshView.XRefreshViewListener() {
+            @Override
+            public void onRefresh() {
+            }
+
+            @Override
+            public void onRefresh(boolean isPullDown) {
+                loadData();
+            }
+
+            @Override
+            public void onLoadMore(boolean isSilence) {
+
+            }
+
+            @Override
+            public void onRelease(float direction) {
+
+            }
+
+            @Override
+            public void onHeaderMove(double headerMovePercent, int offsetY) {
+
             }
         });
     }
@@ -72,7 +101,7 @@ public abstract class BaseTitleFragment extends BaseFragment {
         listTitle.addFooterView(((LayoutInflater) getActivity().
                 getSystemService(LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.footer_article_title, null, false));
-        loadData();
+        dataLayout.setAutoRefresh(true);
     }
 
     public abstract void loadData();

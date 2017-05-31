@@ -31,12 +31,18 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listTitle"
+    <com.andview.refreshview.XRefreshView xmlns:xrefreshview="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/layout_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:visibility="gone">
 
-    </ListView>
+        <ListView
+            android:id="@+id/listTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.andview.refreshview.XRefreshView>
 
 </LinearLayout>
