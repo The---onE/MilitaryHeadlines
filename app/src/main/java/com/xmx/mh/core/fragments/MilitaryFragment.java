@@ -3,12 +3,12 @@ package com.xmx.mh.core.fragments;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.xmx.mh.common.json.JSONUtil;
 import com.xmx.mh.common.net.HttpGetCallback;
 import com.xmx.mh.common.net.HttpManager;
 import com.xmx.mh.module.article.ArticleTitle;
 import com.xmx.mh.module.net.NetConstants;
 import com.xmx.mh.utils.ExceptionUtil;
-import com.xmx.mh.utils.JSONUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

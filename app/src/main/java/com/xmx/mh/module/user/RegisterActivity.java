@@ -1,21 +1,17 @@
 package com.xmx.mh.module.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.avos.avoscloud.AVException;
 import com.xmx.mh.R;
 import com.xmx.mh.base.activity.BaseTempActivity;
+import com.xmx.mh.common.json.JSONUtil;
 import com.xmx.mh.common.net.HttpGetCallback;
 import com.xmx.mh.common.net.HttpManager;
 import com.xmx.mh.common.user.IUserManager;
-import com.xmx.mh.common.user.UserConstants;
-import com.xmx.mh.common.user.UserData;
 import com.xmx.mh.common.user.UserManager;
-import com.xmx.mh.common.user.callback.RegisterCallback;
 import com.xmx.mh.module.net.NetConstants;
 import com.xmx.mh.utils.ExceptionUtil;
 
@@ -73,8 +69,23 @@ public class RegisterActivity extends BaseTempActivity {
                         new HttpGetCallback() {
                             @Override
                             public void success(String result) {
-                                showToast(result);
                                 register.setEnabled(true);
+                                try {
+                                    Map<String, Object> map = JSONUtil.parseObject(result);
+                                    String status = map.get("status").toString();
+                                    String prompt = map.get("prompt").toString();
+                                    switch (status) {
+                                        case "0":
+                                            showToast(prompt);
+                                            break;
+                                        case "1":
+                                            showToast(prompt);
+                                            finish();
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    ExceptionUtil.normalException(e, RegisterActivity.this);
+                                }
                             }
 
                             @Override

@@ -1,4 +1,4 @@
-package com.xmx.mh.utils;
+package com.xmx.mh.common.json;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,12 +16,14 @@ import java.util.Map;
  */
 
 public class JSONUtil {
-    public static final String RESPONSE_STATUS = "status";
-    public static final String STATUS_ERROR = "0";
-    public static final String STATUS_EXECUTE_SUCCESS = "1";
-    public static final String STATUS_QUERY_SUCCESS = "2";
-    public static final String RESPONSE_PROMPT = "prompt";
-    public static final String RESPONSE_ENTITIES = "entities";
+
+    public static final String RESPONSE_STATUS = "status"; // 状态键
+    public static final String STATUS_ERROR = "0"; // 失败状态
+    public static final String STATUS_EXECUTE_SUCCESS = "1"; // 成功状态（无数据）
+    public static final String STATUS_QUERY_SUCCESS = "2"; // 成功状态（有数据）
+    public static final String RESPONSE_PROMPT = "prompt"; // 提示消息键
+    public static final String RESPONSE_ENTITIES = "entities"; // 数据列表键
+    public static final String RESPONSE_ENTITY = "entity"; // 单数据键
 
     /**
      * 将JSON字符串解析为Map
@@ -207,5 +209,27 @@ public class JSONUtil {
             i++;
         }
         return source;
+    }
+
+    static public<T extends IJsonEntity> ListJsonObject<T> parseListObject(String json, Class<T> c) throws Exception {
+        Map<String, Object> map = parseObject(json);
+        ListJsonObject<T> object = new ListJsonObject<>();
+
+        object.status = (String) map.get(RESPONSE_STATUS);
+        object.prompt = (String) map.get(RESPONSE_PROMPT);
+        if (STATUS_QUERY_SUCCESS.equals(object.status)) {
+            List<Object> list = (List<Object>) map.get(RESPONSE_ENTITIES);
+            List<T> entities = new ArrayList<>();
+            for (Object item : list) {
+                T t = c.newInstance();
+                t.initWithJson((Map<String, Object>)item);
+                entities.add(t);
+            }
+            object.entities = entities;
+        } else {
+            object.entities = null;
+        }
+
+        return object;
     }
 }

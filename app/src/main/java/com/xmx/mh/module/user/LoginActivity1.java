@@ -8,22 +8,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.avos.avoscloud.AVException;
+import com.xmx.mh.R;
 import com.xmx.mh.base.activity.BaseTempActivity;
-import com.xmx.mh.common.json.JSONUtil;
-import com.xmx.mh.common.net.HttpGetCallback;
-import com.xmx.mh.common.net.HttpManager;
 import com.xmx.mh.common.user.IUserManager;
 import com.xmx.mh.common.user.UserConstants;
+import com.xmx.mh.common.user.UserData;
 import com.xmx.mh.common.user.UserManager;
+import com.xmx.mh.common.user.callback.LoginCallback;
 import com.xmx.mh.core.Constants;
-import com.xmx.mh.R;
-import com.xmx.mh.module.net.NetConstants;
+import com.xmx.mh.core.activity.MainActivity;
 import com.xmx.mh.utils.ExceptionUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class LoginActivity extends BaseTempActivity {
+public class LoginActivity1 extends BaseTempActivity {
     private long mExitTime = 0;
     public boolean mustFlag = false;
 
@@ -50,37 +47,38 @@ public class LoginActivity extends BaseTempActivity {
                     showToast(R.string.password_empty);
                 } else {
                     login.setEnabled(false);
-                    Map<String, String> params = new HashMap<>();
-                    params.put("user", username);
-                    params.put("pwd", password);
-
-                    HttpManager.getInstance().get(NetConstants.LOGIN_URL, params,
-                            new HttpGetCallback() {
+                    userManager.login(username, password,
+                            new LoginCallback() {
                                 @Override
-                                public void success(String result) {
-                                    login.setEnabled(true);
-                                    try {
-                                        Map<String, Object> map = JSONUtil.parseObject(result);
-                                        String status = map.get("status").toString();
-                                        String prompt = map.get("prompt").toString();
-                                        switch (status) {
-                                            case "0":
-                                                showToast(prompt);
-                                                break;
-                                            case "1":
-                                                showToast(prompt);
-                                                finish();
-                                                break;
-                                        }
-                                    } catch (Exception e) {
-                                        ExceptionUtil.normalException(e, LoginActivity.this);
+                                public void success(UserData user) {
+                                    showToast(R.string.login_success);
+                                    if (mustFlag) {
+                                        startActivity(MainActivity.class);
                                     }
+                                    Intent i = new Intent();
+                                    setResult(RESULT_OK, i);
+                                    finish();
                                 }
 
                                 @Override
-                                public void fail(Exception e) {
-                                    ExceptionUtil.normalException(e, LoginActivity.this);
+                                public void error(AVException e) {
+                                    showToast(R.string.network_error);
+                                    ExceptionUtil.normalException(e, getBaseContext());
                                     login.setEnabled(true);
+                                }
+
+                                @Override
+                                public void error(int error) {
+                                    switch (error) {
+                                        case UserConstants.USERNAME_ERROR:
+                                            showToast(R.string.username_error);
+                                            login.setEnabled(true);
+                                            break;
+                                        case UserConstants.PASSWORD_ERROR:
+                                            showToast(R.string.password_error);
+                                            login.setEnabled(true);
+                                            break;
+                                    }
                                 }
                             });
                 }
@@ -91,7 +89,7 @@ public class LoginActivity extends BaseTempActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(LoginActivity.this, RegisterActivity.class),
+                startActivityForResult(new Intent(LoginActivity1.this, RegisterActivity.class),
                         UserConstants.REGISTER_REQUEST_CODE);
             }
         });

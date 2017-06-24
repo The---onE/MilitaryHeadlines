@@ -11,5 +11,6 @@ public class NetConstants {
     public static final String LOGIN_URL = SERVER_URL + "/Login";
 
     public static final String TITLE_LIST_URL = SERVER_URL + "/GetTitleList";
+    public static final String ARTICLE_CONTENT_URL = SERVER_URL + "/GetArticleContent";
 
 }
