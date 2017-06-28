@@ -3,7 +3,7 @@ package com.xmx.mh.core.fragments;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.xmx.mh.module.article.ArticleTitle;
+import com.xmx.mh.module.article.Article;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,15 +21,15 @@ public class HotFragment extends BaseTitleFragment {
 
         list = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            ArticleTitle articleTitle = new ArticleTitle();
-            articleTitle.id = i;
-            articleTitle.title = "标题" + i;
+            Article article = new Article();
+            article.id = i;
+            article.title = "标题" + i;
             if (i % 5 == 0) {
-                articleTitle.image = "image";
+                article.image1 = "image";
             }
-            articleTitle.author = "作者";
-            articleTitle.time = new Date();
-            list.add(articleTitle);
+            article.author = "作者";
+            article.timeCreated = new Date();
+            list.add(article);
         }
         listAdapter.updateList(list);
         dataLayout.stopRefresh(true);

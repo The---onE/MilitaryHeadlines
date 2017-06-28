@@ -1,4 +1,4 @@
-package com.xmx.mh.module.article;
+package com.xmx.mh.module.collect;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,11 +9,9 @@ import android.widget.TextView;
 
 import com.xmx.mh.R;
 import com.xmx.mh.base.activity.BaseTempActivity;
-import com.xmx.mh.common.net.HttpGetCallback;
-import com.xmx.mh.common.net.HttpManager;
+import com.xmx.mh.module.article.Article;
+import com.xmx.mh.module.article.ArticleContent;
 import com.xmx.mh.module.comment.Comment;
-import com.xmx.mh.module.net.NetConstants;
-import com.xmx.mh.utils.ExceptionUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -30,7 +28,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 @ContentView(R.layout.activity_article)
-public class ArticleActivity extends BaseTempActivity {
+public class CollectActivity extends BaseTempActivity {
     @ViewInject(R.id.tv_title)
     private TextView titleView;
     @ViewInject(R.id.tv_time)
@@ -103,7 +101,7 @@ public class ArticleActivity extends BaseTempActivity {
 //
 //            @Override
 //            public void fail(Exception e) {
-//                ExceptionUtil.normalException(e, ArtilectActivity.this);
+//                ExceptionUtil.normalException(e, CollectActivity.this);
 //            }
 //        });
 

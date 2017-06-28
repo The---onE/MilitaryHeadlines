@@ -6,7 +6,7 @@ import android.view.View;
 import com.xmx.mh.common.json.JSONUtil;
 import com.xmx.mh.common.net.HttpGetCallback;
 import com.xmx.mh.common.net.HttpManager;
-import com.xmx.mh.module.article.ArticleTitle;
+import com.xmx.mh.module.article.Article;
 import com.xmx.mh.module.net.NetConstants;
 import com.xmx.mh.utils.ExceptionUtil;
 
@@ -42,8 +42,8 @@ public class MilitaryFragment extends BaseTitleFragment {
                                 List<Object> array = (List<Object>) map.get(JSONUtil.RESPONSE_ENTITIES);
                                 list = new ArrayList<>();
                                 for (Object item : array) {
-                                    ArticleTitle articleTitle = new ArticleTitle((Map<String, Object>) item);
-                                    list.add(articleTitle);
+                                    Article article = new Article((Map<String, Object>) item);
+                                    list.add(article);
                                 }
                                 listAdapter.updateList(list);
                                 dataLayout.stopRefresh(true);

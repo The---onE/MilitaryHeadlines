@@ -18,12 +18,12 @@ import java.util.List;
  * Created by The_onE on 2017/5/16.
  */
 
-public class ArticleListAdapter extends BaseEntityAdapter<ArticleTitle> {
-    public ArticleListAdapter(Context context, List<ArticleTitle> data) {
+public class ArticleListAdapter extends BaseEntityAdapter<Article> {
+    public ArticleListAdapter(Context context, List<Article> data) {
         super(context, data);
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         TextView title;
         ImageView image;
         TextView author;
@@ -34,7 +34,7 @@ public class ArticleListAdapter extends BaseEntityAdapter<ArticleTitle> {
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
         if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.item_article_title, null);
+            view = LayoutInflater.from(mContext).inflate(R.layout.item_article, null);
             holder = new ViewHolder();
             holder.title = (TextView) view.findViewById(R.id.item_title);
             holder.image = (ImageView) view.findViewById(R.id.item_image);
@@ -46,16 +46,16 @@ public class ArticleListAdapter extends BaseEntityAdapter<ArticleTitle> {
         }
 
         if (i < mData.size()) {
-            ArticleTitle articleTitle = mData.get(i);
-            holder.title.setText(articleTitle.title);
-            if (articleTitle.image != null) {
+            Article article = mData.get(i);
+            holder.title.setText(article.title);
+            if (article.image1 != null) {
                 holder.image.setVisibility(View.VISIBLE);
             } else {
                 holder.image.setVisibility(View.GONE);
             }
-            holder.author.setText(articleTitle.author);
+            holder.author.setText(article.author);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String timeString = df.format(articleTitle.time);
+            String timeString = df.format(article.timeCreated);
             holder.time.setText(timeString);
         } else {
             holder.title.setText("加载失败");

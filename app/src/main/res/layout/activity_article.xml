@@ -47,19 +47,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <LinearLayout
+                android:id="@+id/layout_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="最新评论"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_collect"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@color/transparent"
+            android:text="收藏" />
 
         <EditText
+            android:id="@+id/tv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="写评论…"/>
+            android:layout_toLeftOf="@+id/btn_comment"
+            android:layout_toRightOf="@+id/btn_collect"
+            android:hint="写评论…" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_comment"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:text="评论" />
+
+    </RelativeLayout>
 
 </LinearLayout>

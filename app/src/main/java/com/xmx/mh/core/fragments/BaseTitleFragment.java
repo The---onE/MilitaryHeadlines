@@ -15,7 +15,7 @@ import com.xmx.mh.R;
 import com.xmx.mh.base.fragment.BaseFragment;
 import com.xmx.mh.module.article.ArticleActivity;
 import com.xmx.mh.module.article.ArticleListAdapter;
-import com.xmx.mh.module.article.ArticleTitle;
+import com.xmx.mh.module.article.Article;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public abstract class BaseTitleFragment extends BaseFragment {
 
     protected ListView listTitle;
     protected ArticleListAdapter listAdapter;
-    protected List<ArticleTitle> list;
+    protected List<Article> list;
 
     protected RelativeLayout loadingLayout;
     protected XRefreshView dataLayout;
@@ -61,8 +61,9 @@ public abstract class BaseTitleFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                ArticleTitle articleTitle = list.get(i);
-                intent.putExtra("id", articleTitle.id);
+                Article article = list.get(i);
+                intent.putExtra("id", article.id);
+                intent.putExtra("article", article);
                 startActivity(intent);
             }
         });
@@ -96,11 +97,11 @@ public abstract class BaseTitleFragment extends BaseFragment {
 
     @Override
     protected void processLogic(View view, Bundle savedInstanceState) {
-        listAdapter = new ArticleListAdapter(getContext(), new ArrayList<ArticleTitle>());
+        listAdapter = new ArticleListAdapter(getContext(), new ArrayList<Article>());
         listTitle.setAdapter(listAdapter);
         listTitle.addFooterView(((LayoutInflater) getActivity().
                 getSystemService(LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.footer_article_title, null, false));
+                .inflate(R.layout.footer_article_list, null, false));
         dataLayout.setAutoRefresh(true);
     }
 
