@@ -137,6 +137,8 @@ public class CollectActivity extends BaseTempActivity {
             commentLayout.addView(comment);
             commentLayout.addView(createSeparatorView());
         }
+
+        // TODO 加载收藏信息
     }
 
     private View createSeparatorView() {

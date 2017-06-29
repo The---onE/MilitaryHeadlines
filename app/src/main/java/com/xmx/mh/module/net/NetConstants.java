@@ -5,12 +5,13 @@ package com.xmx.mh.module.net;
  */
 
 public class NetConstants {
-    public static final String SERVER_URL = "http://139.224.9.86/MilitaryHeadlines";
+//    public static final String SERVER_URL = "http://139.224.9.86/MilitaryHeadlines";
+    public static final String SERVER_URL = "http://10.0.2.2:8080/MilitaryHeadlines";
 
     public static final String REGISTER_URL = SERVER_URL + "/Register";
     public static final String LOGIN_URL = SERVER_URL + "/Login";
 
-    public static final String TITLE_LIST_URL = SERVER_URL + "/GetTitleList";
+    public static final String TITLE_LIST_URL = SERVER_URL + "/ListArticle";
     public static final String ARTICLE_CONTENT_URL = SERVER_URL + "/GetArticleContent";
 
 }

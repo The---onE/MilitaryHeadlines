@@ -24,7 +24,7 @@ public class RecommendFragment extends BaseTitleFragment {
     public void loadData() {
         loadingFlag = true;
         Map<String, String> condition = new HashMap<>();
-        condition.put("type", "1");
+        condition.put("type", "推荐");
         HttpManager.getInstance().get(NetConstants.TITLE_LIST_URL, condition, new HttpGetCallback() {
             @Override
             public void success(String result) {
