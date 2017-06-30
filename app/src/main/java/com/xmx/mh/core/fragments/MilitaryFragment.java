@@ -21,59 +21,10 @@ import java.util.Map;
 public class MilitaryFragment extends BaseTitleFragment {
 
     @Override
-    public void loadData() {
-        loadingFlag = true;
+    public Map<String, String> getCondition() {
         Map<String, String> condition = new HashMap<>();
-        condition.put("type", "3");
-        HttpManager.getInstance().get(NetConstants.TITLE_LIST_URL, condition, new HttpGetCallback() {
-            @Override
-            public void success(String result) {
-                loadingFlag = false;
-                result = result.trim();
-                if (result.startsWith("{")) {
-                    try {
-                        Map<String, Object> map = JSONUtil.parseObject(result);
-                        String status = (String) map.get(JSONUtil.RESPONSE_STATUS);
-                        loadingLayout.setVisibility(View.GONE);
-                        dataLayout.setVisibility(View.VISIBLE);
-                        switch (status) {
-                            case JSONUtil.STATUS_QUERY_SUCCESS:
-                                showToast((String) map.get(JSONUtil.RESPONSE_PROMPT));
-                                List<Object> array = (List<Object>) map.get(JSONUtil.RESPONSE_ENTITIES);
-                                list = new ArrayList<>();
-                                for (Object item : array) {
-                                    Article article = new Article((Map<String, Object>) item);
-                                    list.add(article);
-                                }
-                                listAdapter.updateList(list);
-                                dataLayout.stopRefresh(true);
-                                break;
-                            case JSONUtil.STATUS_ERROR:
-                                showToast((String) map.get(JSONUtil.RESPONSE_PROMPT));
-                                dataLayout.stopRefresh(false);
-                                break;
-                            case JSONUtil.STATUS_EXECUTE_SUCCESS:
-                                showToast((String) map.get(JSONUtil.RESPONSE_PROMPT));
-                                dataLayout.stopRefresh(true);
-                                break;
-                        }
-                    } catch (Exception e) {
-                        ExceptionUtil.normalException(e, getContext());
-                        showToast("数据异常");
-                        dataLayout.stopRefresh(false);
-                    }
-                } else {
-                    showToast("服务器连接失败");
-                    dataLayout.stopRefresh(false);
-                }
-            }
+        condition.put("type", "军事");
 
-            @Override
-            public void fail(Exception e) {
-                loadingFlag = false;
-                showToast("服务器连接失败");
-                dataLayout.stopRefresh(false);
-            }
-        });
+        return condition;
     }
 }

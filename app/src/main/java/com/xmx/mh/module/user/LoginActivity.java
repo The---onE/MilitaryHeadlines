@@ -9,25 +9,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.xmx.mh.base.activity.BaseTempActivity;
-import com.xmx.mh.common.json.JSONUtil;
-import com.xmx.mh.common.net.HttpGetCallback;
-import com.xmx.mh.common.net.HttpManager;
-import com.xmx.mh.common.user.IUserManager;
-import com.xmx.mh.common.user.UserConstants;
-import com.xmx.mh.common.user.UserManager;
 import com.xmx.mh.core.Constants;
 import com.xmx.mh.R;
-import com.xmx.mh.module.net.NetConstants;
 import com.xmx.mh.utils.ExceptionUtil;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.greenrobot.eventbus.EventBus;
 
 public class LoginActivity extends BaseTempActivity {
     private long mExitTime = 0;
     public boolean mustFlag = false;
 
-    private IUserManager userManager = UserManager.getInstance();
+    int REGISTER_REQUEST_CODE = 100;
+
+    private UserManager userManager = UserManager.getInstance();
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -50,39 +44,26 @@ public class LoginActivity extends BaseTempActivity {
                     showToast(R.string.password_empty);
                 } else {
                     login.setEnabled(false);
-                    Map<String, String> params = new HashMap<>();
-                    params.put("user", username);
-                    params.put("pwd", password);
+                    userManager.login(username, password, new UserCallback() {
+                        @Override
+                        public void success(int id, String nickname) {
+                            showToast("登录成功");
+                            EventBus.getDefault().post(new LoginEvent());
+                            finish();
+                        }
 
-                    HttpManager.getInstance().get(NetConstants.LOGIN_URL, params,
-                            new HttpGetCallback() {
-                                @Override
-                                public void success(String result) {
-                                    login.setEnabled(true);
-                                    try {
-                                        Map<String, Object> map = JSONUtil.parseObject(result);
-                                        String status = map.get("status").toString();
-                                        String prompt = map.get("prompt").toString();
-                                        switch (status) {
-                                            case "0":
-                                                showToast(prompt);
-                                                break;
-                                            case "1":
-                                                showToast(prompt);
-                                                finish();
-                                                break;
-                                        }
-                                    } catch (Exception e) {
-                                        ExceptionUtil.normalException(e, LoginActivity.this);
-                                    }
-                                }
+                        @Override
+                        public void fail(String prompt) {
+                            showToast(prompt);
+                            login.setEnabled(true);
+                        }
 
-                                @Override
-                                public void fail(Exception e) {
-                                    ExceptionUtil.normalException(e, LoginActivity.this);
-                                    login.setEnabled(true);
-                                }
-                            });
+                        @Override
+                        public void error(Exception e) {
+                            ExceptionUtil.normalException(e, LoginActivity.this);
+                            login.setEnabled(true);
+                        }
+                    });
                 }
             }
         });
@@ -92,7 +73,7 @@ public class LoginActivity extends BaseTempActivity {
             @Override
             public void onClick(View view) {
                 startActivityForResult(new Intent(LoginActivity.this, RegisterActivity.class),
-                        UserConstants.REGISTER_REQUEST_CODE);
+                        REGISTER_REQUEST_CODE);
             }
         });
     }
@@ -103,26 +84,13 @@ public class LoginActivity extends BaseTempActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (mustFlag) {
-            if ((System.currentTimeMillis() - mExitTime) > Constants.LONGEST_EXIT_TIME) {
-                showToast(R.string.confirm_exit);
-                mExitTime = System.currentTimeMillis();
-            } else {
-                finish();
-            }
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 若从注册页注册成功返回
-        if (requestCode == UserConstants.REGISTER_REQUEST_CODE) {
+        if (requestCode == REGISTER_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 setResult(RESULT_OK, new Intent());
+                EventBus.getDefault().post(new LoginEvent());
                 finish();
             }
         }

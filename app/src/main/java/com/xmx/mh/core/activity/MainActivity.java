@@ -16,26 +16,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.avos.avoscloud.AVException;
 import com.xmx.mh.base.activity.BaseActivity;
-import com.xmx.mh.common.user.IUserManager;
 import com.xmx.mh.core.fragments.HistoryFragment;
 import com.xmx.mh.core.fragments.HotFragment;
 import com.xmx.mh.core.fragments.InternationalFragment;
 import com.xmx.mh.core.fragments.MilitaryFragment;
 import com.xmx.mh.core.fragments.ProductsFragment;
+import com.xmx.mh.module.collect.CollectActivity;
 import com.xmx.mh.module.log.OperationLogActivity;
-import com.xmx.mh.module.user.LoginActivity;
-import com.xmx.mh.common.user.LoginEvent;
-import com.xmx.mh.common.user.UserData;
-import com.xmx.mh.common.user.callback.LogoutCallback;
 import com.xmx.mh.core.Constants;
 import com.xmx.mh.R;
 import com.xmx.mh.core.fragments.RecommendFragment;
 import com.xmx.mh.core.PagerAdapter;
-import com.xmx.mh.common.user.callback.AutoLoginCallback;
-import com.xmx.mh.common.user.UserConstants;
-import com.xmx.mh.common.user.UserManager;
+import com.xmx.mh.module.user.LoginActivity;
+import com.xmx.mh.module.user.LoginEvent;
+import com.xmx.mh.module.user.UserCallback;
+import com.xmx.mh.module.user.UserManager;
 import com.xmx.mh.utils.ExceptionUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,7 +49,9 @@ public class MainActivity extends BaseActivity
     // 侧滑菜单登录菜单项
     MenuItem login;
 
-    private IUserManager userManager = UserManager.getInstance();
+    int LOGIN_REQUEST_CODE = 101;
+
+    private UserManager userManager = UserManager.getInstance();
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -104,10 +102,22 @@ public class MainActivity extends BaseActivity
         NavigationView navigation = getViewById(R.id.nav_view);
         Menu menu = navigation.getMenu();
         login = menu.findItem(R.id.nav_logout);
-        // 在SplashActivity中自动登录，在此校验登录
-        if (userManager.isLoggedIn()) {
-            checkLogin();
-        }
+        userManager.autoLogin(new UserCallback() {
+            @Override
+            public void success(int id, String nickname) {
+                login.setTitle(nickname + " 点击注销");
+            }
+
+            @Override
+            public void fail(String prompt) {
+                showToast(prompt);
+            }
+
+            @Override
+            public void error(Exception e) {
+                ExceptionUtil.normalException(e, MainActivity.this);
+            }
+        });
     }
 
     /**
@@ -149,40 +159,27 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == UserConstants.LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
             // 登录成功
             checkLogin();
         }
     }
 
     private void checkLogin() {
-        userManager.checkLogin(new AutoLoginCallback() {
+        userManager.checkLogin(new UserCallback() {
             @Override
-            public void success(UserData user) {
-                login.setTitle(user.nickname + " 点击注销");
+            public void success(int id, String nickname) {
+                login.setTitle(nickname + " 点击注销");
             }
 
             @Override
-            public void error(int error) {
-                switch (error) {
-                    case UserConstants.CANNOT_CHECK_LOGIN:
-                        showToast("请先登录");
-                        break;
-                    case UserConstants.NOT_LOGGED_IN:
-                        showToast("请在侧边栏中选择登录");
-                        break;
-                    case UserConstants.USERNAME_ERROR:
-                        showToast("请在侧边栏中选择登录");
-                        break;
-                    case UserConstants.CHECKSUM_ERROR:
-                        showToast("登录过期，请在侧边栏中重新登录");
-                        break;
-                }
+            public void fail(String prompt) {
+                showToast(prompt);
             }
 
             @Override
-            public void error(AVException e) {
-                ExceptionUtil.normalException(e, getBaseContext());
+            public void error(Exception e) {
+                ExceptionUtil.normalException(e, MainActivity.this);
             }
         });
     }
@@ -211,44 +208,30 @@ public class MainActivity extends BaseActivity
             case R.id.nav_products: // 军品
                 vp.setCurrentItem(5);
                 break;
-            case R.id.nav_setting: // 设置
-                break;
             case R.id.nav_log: // 设置
                 startActivity(OperationLogActivity.class);
                 break;
             case R.id.nav_logout: // 登录/注销
-                final Intent intent = new Intent(this, LoginActivity.class);
-                if (userManager.isLoggedIn()) {
-                    // 注销
-                    AlertDialog.Builder builder = new AlertDialog
-                            .Builder(this);
-                    builder.setMessage("确定要注销吗？");
-                    builder.setTitle("提示");
-                    builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // 确认注销
-                            userManager.logout(new LogoutCallback() {
+                if (userManager.isLogin()) {
+                    new AlertDialog.Builder(this)
+                            .setMessage("确定要注销吗")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void logout(UserData user) {
-                                    //SyncEntityManager.getInstance().getSQLManager().clearDatabase();
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
                                 }
-                            });
-                            showToast("注销成功");
-                            login.setTitle("登录");
-//                            startActivityForResult(intent, UserConstants.LOGIN_REQUEST_CODE);
-                        }
-                    });
-                    builder.show();
+                            })
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    userManager.logout();
+                                    login.setTitle("登录");
+                                }
+                            })
+                            .show();
                 } else {
-                    // 登录
-                    startActivityForResult(intent, UserConstants.LOGIN_REQUEST_CODE);
+                    startActivityForResult(new Intent(MainActivity.this, LoginActivity.class),
+                            LOGIN_REQUEST_CODE);
                 }
                 break;
         }
@@ -274,8 +257,8 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_collection) {
+            startActivity(CollectActivity.class);
         }
 
         return super.onOptionsItemSelected(item);

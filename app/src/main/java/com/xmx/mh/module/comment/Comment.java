@@ -33,7 +33,6 @@ public class Comment {
             content = (String) entity.get("content");
             articleId = Integer.parseInt((String) entity.get("articleId"));
             userId = Integer.parseInt((String) entity.get("userId"));
-            likeCount = Integer.parseInt((String) entity.get("likeCount"));
         } catch (Exception e) {
             ExceptionUtil.normalException(e, null);
         }

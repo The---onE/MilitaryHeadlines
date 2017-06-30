@@ -2,14 +2,11 @@ package com.xmx.mh.core;
 
 import android.app.Activity;
 
-import com.avos.avoscloud.AVInstallation;
-import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.PushService;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xmx.mh.BuildConfig;
 import com.xmx.mh.common.data.DataManager;
 import com.xmx.mh.common.push.ReceiveMessageActivity;
-import com.xmx.mh.common.user.UserManager;
+import com.xmx.mh.module.user.UserManager;
 
 import org.xutils.x;
 
@@ -49,14 +46,8 @@ public class Application extends android.app.Application {
         x.Ext.init(this);
         x.Ext.setDebug(BuildConfig.DEBUG);
 
-        AVOSCloud.initialize(this, Constants.APP_ID, Constants.APP_KEY);
-
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
-
-        PushService.setDefaultPushCallback(this, ReceiveMessageActivity.class);
-        PushService.subscribe(this, "system", ReceiveMessageActivity.class);
-        AVInstallation.getCurrentInstallation().saveInBackground();
 
         UserManager.getInstance().setContext(this);
 
